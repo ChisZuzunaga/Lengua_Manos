@@ -3,7 +3,9 @@ Mega proyecto de reconocimiento de gestos mediante entrenamiento por redes neuro
 
 Acceder al entorno virtual
 
-pruebas\Scripts\activate
+python -m venv env
+env\Scripts\activate
+pip install -r requirements.txt
 
 Primero se capturan los datos utilizando
 

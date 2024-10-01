@@ -1,7 +1,7 @@
 import cv2
 import mediapipe as mp
 
-from src.classifier import load_training_data, classify_hand_gesture
+from classifier import load_training_data, classify_hand_gesture
 
 # Inicialización de MediaPipe y OpenCV
 mp_hands = mp.solutions.hands

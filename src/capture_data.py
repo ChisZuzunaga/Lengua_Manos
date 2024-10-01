@@ -9,7 +9,7 @@ def save_hand_position(letter, landmarks):
             {"x": lm.x, "y": lm.y, "z": lm.z} for lm in landmarks.landmark
         ]
     }
-    with open("pruebas/data/hand_positions.json", "a") as file:
+    with open("/data/hand_positions.json", "a") as file:
         file.write(json.dumps(data) + "\n")
 
 # Inicialización de MediaPipe y OpenCV

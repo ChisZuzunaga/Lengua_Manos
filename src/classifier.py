@@ -9,7 +9,7 @@ def calculate_distance(landmarks1, landmarks2):
 
 def load_training_data():
     training_data = []
-    with open("pruebas/data/hand_positions.json", "r") as file:
+    with open("data/hand_positions.json", "r") as file:
         for line in file:
             training_data.append(json.loads(line))
     return training_data

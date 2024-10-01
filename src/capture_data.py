@@ -9,7 +9,7 @@ def save_hand_position(letter, landmarks):
             {"x": lm.x, "y": lm.y, "z": lm.z} for lm in landmarks.landmark
         ]
     }
-    with open("/data/hand_positions.json", "a") as file:
+    with open("data/hand_positions.json", "a") as file:
         file.write(json.dumps(data) + "\n")
 
 # Inicialización de MediaPipe y OpenCV
@@ -52,6 +52,10 @@ with mp_hands.Hands(max_num_hands=1) as hands:
                 elif cv2.waitKey(1) & 0xFF == ord('u'):
                     save_hand_position("U", hand_landmarks)
                     print("Posición guardada para 'U'.") 
+                
+                elif cv2.waitKey(1) & 0xFF == ord('m'):
+                    save_hand_position("M", hand_landmarks)
+                    print("Posición guardada para 'M'.") 
 
         cv2.imshow('Captura de datos', image)
         if cv2.waitKey(1) & 0xFF == ord('q'):

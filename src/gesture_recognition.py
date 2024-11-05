@@ -43,17 +43,30 @@ if __name__ == "__main__":
         if not ret:
             break
 
+        # Dimensiones del cuadro guía
+        frame_height, frame_width = frame.shape[:2]
+        square_size = 300  # Tamaño del cuadrado guía
+        x1, y1 = (frame_width - square_size) // 2, (frame_height - square_size) // 2
+        x2, y2 = x1 + square_size, y1 + square_size
+
+        # Reconocer el gesto
         predicted_class = recognize_gesture(frame)
 
         # Definir posición para el texto centrado en la parte inferior
         text_position = (frame.shape[1] // 2 - 100, frame.shape[0] - 30)
-        
+
         # Dibujar contorno blanco y luego texto negro
         cv2.putText(frame, predicted_class, text_position, cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 3, cv2.LINE_AA)
         cv2.putText(frame, predicted_class, text_position, cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2, cv2.LINE_AA)
 
+        # Dibuja el cuadro guía en el centro
+        color = (0, 255, 0)
+        cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
+        
+        # Mostrar el resultado en pantalla
         cv2.imshow("Reconocimiento de gestos", frame)
 
+        # Salir con la tecla 'q'
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 

@@ -1,6 +1,7 @@
 import cv2
 import os
 import mediapipe as mp
+import sys
 
 # Inicializa MediaPipe Hands
 mp_hands = mp.solutions.hands
@@ -27,8 +28,8 @@ def get_last_image_number(folder_path, gesture_name):
     return max(numbers) + 1
 
 # Función para capturar imágenes
-def capture_images(gesture_name, max_images=60):
-    cap = cv2.VideoCapture(0)
+def capture_images(gesture_name, camera_index, max_images=60):
+    cap = cv2.VideoCapture(camera_index)
     folder_path = create_gesture_folder(gesture_name)
 
     # Inicializar el contador desde el último número existente en la carpeta
@@ -90,5 +91,11 @@ def capture_images(gesture_name, max_images=60):
     print(f"Captura completa. Se han guardado {new_images_captured} imágenes.")
 
 if __name__ == "__main__":
-    gesture_name = input("Introduce el nombre del gesto o letra a capturar: ")
-    capture_images(gesture_name, max_images=60)  # Captura un total de 60 imágenes
+    # Obtener el gesto y el índice de la cámara de los argumentos
+    if len (sys.argv) < 3:
+        print("Uso: python capture_data.py <camera_index> <gesture_name>")
+        sys.exit(1)
+
+    camera_index = int(sys.argv[1])
+    gesture_name = sys.argv[2]
+    capture_images(gesture_name, camera_index, max_images=60)  # Captura un total de 60 imágenes

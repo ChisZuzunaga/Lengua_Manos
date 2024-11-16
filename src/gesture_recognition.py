@@ -5,6 +5,7 @@ from tensorflow.keras.preprocessing.image import img_to_array
 import mediapipe as mp
 import os
 import time
+import sys
 
 global gesture_history, letter_mode, last_gesture, timer, timer_started
 # Cargar las clases de las subcarpetas en 'data'
@@ -45,7 +46,10 @@ def recognize_gesture(frame):
     return predicted_class, result.multi_hand_landmarks  # Devolver también las marcas de la mano
 
 if __name__ == "__main__":
-    cap = cv2.VideoCapture(0)
+    # Obtener el índice de la cámara desde los argumentos de línea de comandos
+    camera_index = int(sys.argv[1]) if len(sys.argv) > 1 else 0  # Valor por defecto
+
+    cap = cv2.VideoCapture(camera_index)
 
     while True:
         ret, frame = cap.read()
@@ -72,7 +76,6 @@ if __name__ == "__main__":
                         break  # Detener la verificación si se encuentra una mano dentro del cuadro
 
         # Actualizar el historial de gestos solo si la mano está dentro del cuadro
-          # Declarar las variables globales aquí
         if hand_in_box:
             last_gesture = predicted_class  # Actualizar el último gesto reconocido
 
@@ -95,7 +98,7 @@ if __name__ == "__main__":
 
         # Dibujar contorno blanco y luego texto negro
         cv2.putText(frame, last_gesture if hand_in_box else "", text_position, cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 3, cv2.LINE_AA)
-        cv2.putText(frame, last_gesture if hand_in_box else "", text_position, cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2, cv2.LINE_AA)
+        cv2.putText(frame, last_gesture if hand_in_box else "", text_position, cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0 , 0), 2, cv2.LINE_AA)
 
         # Mostrar el historial de gestos en la esquina superior izquierda
         cv2.putText(frame, gesture_history, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)

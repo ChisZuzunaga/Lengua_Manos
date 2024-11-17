@@ -28,7 +28,7 @@ def get_last_image_number(folder_path, gesture_name):
     return max(numbers) + 1
 
 # Función para capturar imágenes
-def capture_images(gesture_name, camera_index, max_images=60):
+def capture_images(gesture_name, camera_index, max_images=300):
     cap = cv2.VideoCapture(camera_index)
     folder_path = create_gesture_folder(gesture_name)
 
@@ -98,4 +98,4 @@ if __name__ == "__main__":
 
     camera_index = int(sys.argv[1])
     gesture_name = sys.argv[2]
-    capture_images(gesture_name, camera_index, max_images=60)  # Captura un total de 60 imágenes
+    capture_images(gesture_name, camera_index, max_images=300)  # Captura un total de 60 imágenes

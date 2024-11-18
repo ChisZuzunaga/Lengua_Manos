@@ -36,7 +36,7 @@ Abre una terminal de anaconda con modo administrador para posterior añadir toda
     pip install mediapipe
     conda install numpy
 
-Luego se va a la ruta del proyecto utilizando "cd C:\Users\queso\OneDrive\Escritorio\Lengu"
+Luego se va a la ruta del proyecto utilizando "cd C:\Users\queso\OneDrive\Escritorio\Lengua_Manos"
 
 No olvidar quitar las comillas y reemplazar la ruta, con la ruta donde guardaron el proyecto.
 

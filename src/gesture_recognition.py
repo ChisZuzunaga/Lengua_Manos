@@ -27,6 +27,20 @@ letter_mode = False
 timer = 0
 timer_started = False
 
+def normalize_landmarks(hand_landmarks, frame_width, frame_height):
+    normalized_landmarks = []
+    for lm in hand_landmarks.landmark:
+        normalized_x = lm.x * frame_width
+        normalized_y = lm.y * frame_height
+        normalized_landmarks.append((normalized_x, normalized_y))
+    return normalized_landmarks
+
+def calculate_similarity(landmarks1, landmarks2):
+    distance = 0
+    for (x1, y1), (x2, y2) in zip(landmarks1, landmarks2):
+        distance += np.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
+    return distance
+
 def recognize_gesture(frame):
     img_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     result = hands.process(img_rgb)
@@ -42,8 +56,14 @@ def recognize_gesture(frame):
     # Realizar la predicción
     prediction = model.predict(img_array)
     predicted_class = class_names[np.argmax(prediction)]
+    confidence = np.max(prediction)  # Obtener la confianza de la predicción
 
-    return predicted_class, result.multi_hand_landmarks  # Devolver también las marcas de la mano
+    # Establecer un umbral de confianza
+    confidence_threshold = 0.5  # Ajusta este valor según sea necesario
+    if confidence < confidence_threshold:
+        predicted_class = "Desconocido"  # Si la confianza es baja, no se reconoce el gesto
+
+    return predicted_class, result.multi_hand_landmarks, confidence  # Devolver también la confianza
 
 if __name__ == "__main__":
     # Obtener el índice de la cámara desde los argumentos de línea de comandos
@@ -63,7 +83,7 @@ if __name__ == "__main__":
         x2, y2 = x1 + square_size, y1 + square_size
 
         # Reconocer el gesto
-        predicted_class, hand_landmarks = recognize_gesture(frame)
+        predicted_class, hand_landmarks, confidence = recognize_gesture(frame)
 
         # Verificar si la mano está dentro del cuadro
         hand_in_box = False
@@ -76,7 +96,7 @@ if __name__ == "__main__":
                         break  # Detener la verificación si se encuentra una mano dentro del cuadro
 
         # Actualizar el historial de gestos solo si la mano está dentro del cuadro
-        if hand_in_box:
+        if hand_in_box and confidence >= 0.5:  # Solo si la confianza es suficiente
             last_gesture = predicted_class  # Actualizar el último gesto reconocido
 
             if letter_mode:
@@ -84,7 +104,7 @@ if __name__ == "__main__":
                     timer = 1  # Reiniciar el temporizador a 1 segundo
                     timer_started = True
                 else:
-                    timer -= 1 / 30  # Disminuir el temporizador basado en el frame rate
+                    timer -= 1 / 30 # Disminuir el temporizador basado en el frame rate
                     if timer <= 0:
                         gesture_history += last_gesture  # Agregar el gesto al historial
                         timer_started = False  # Reiniciar el temporizador

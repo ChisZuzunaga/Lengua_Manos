@@ -4,6 +4,19 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras import layers, models
 import sys
 
+# Verificar si hay GPU disponible
+gpus = tf.config.list_physical_devices('GPU')
+if gpus:
+    try:
+        # Configurar TensorFlow para que use la GPU
+        for gpu in gpus:
+            tf.config.experimental.set_memory_growth(gpu, True)
+        print("GPU está disponible y configurada.")
+    except RuntimeError as e:
+        print(e)
+else:
+    print("No hay GPU disponible, se usará la CPU.")
+
 DATA_DIR = "data"
 IMG_SIZE = (128, 128)
 BATCH_SIZE = 32
